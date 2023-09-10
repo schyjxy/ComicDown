@@ -1,0 +1,143 @@
+﻿<local:PageBase x:Class="ComicDownWpf.pages.DownCharpterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:view="clr-namespace:ComicDownWpf.viewmodel"
+      xmlns:local="clr-namespace:ComicDownWpf.pages"
+      mc:Ignorable="d" 
+      xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+      xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DownCharpterPage">
+
+    <Page.Resources>
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <view:DownLoadBoolConverter x:Key="boolConverter"/>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="300"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Cursor="Hand">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+
+                <RowDefinition Height="70"/>
+
+
+            </Grid.RowDefinitions>
+
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="MouseLeftButtonDown" >
+                    <b:InvokeCommandAction Command="{Binding CoverClickCommand}"/>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+
+            <Image  HorizontalAlignment="Center" Source="{Binding CoverImage}"/>
+            <TextBlock Text="{Binding ComicName}"  Margin="5,10,0,0" Grid.Row="1" FontSize="16" HorizontalAlignment="Center" Foreground="White"/>
+        </Grid>
+
+        <ListBox Margin="5" Name="listBox"   Grid.Row="1" BorderBrush="#23283B"  ItemsSource="{Binding DownList}"  pu:ListBoxHelper.HoverBackground="#007ACC" 
+                 pu:ListBoxHelper.SelectedBackground="#007ACC" pu:ListBoxHelper.ItemHeight="50" Background="Transparent" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+
+            <ListBox.ContextMenu>
+                <ContextMenu Width="150">
+                    <MenuItem  Header="全选"  Command="{Binding FullCheckCommand}"/>
+                    <Separator/>
+                    <MenuItem  Header="反选"  Command="{Binding FullUnCheckCommand}"/>
+                    <Separator/>
+                    <MenuItem  Header="删除" Command="{Binding DeletePatchCommand}"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            
+            <ListBox.ItemContainerStyle>
+                <Style  TargetType="ListBoxItem">
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" Margin="0,0,0,0" BorderBrush="Black">
+                        <Grid >
+                            <b:Interaction.Triggers>
+                                <b:EventTrigger EventName="MouseLeftButtonDown" >
+                                    <b:InvokeCommandAction Command="{Binding ItemClickCommand}"/>
+                                </b:EventTrigger>
+                            </b:Interaction.Triggers>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Background="#23283B"  Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="140"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <CheckBox pu:CheckBoxHelper.CheckedBackground="#007ACC" VerticalAlignment="Center"  IsChecked="{Binding IsChecked}"/>
+                                    <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Path=ChapterName, Mode=TwoWay}" TextTrimming="CharacterEllipsis"  ToolTip="{Binding ComicName}"  FontSize="14" Foreground="White" Margin="10,0,0,0" HorizontalAlignment="Left" MinWidth="500" VerticalAlignment="Top"  FontFamily="微软雅黑"/>
+                                        <ProgressBar pu:ProgressBarHelper.ProgressBarStyle="Standard" Visibility="{Binding DownCompleted, Converter={StaticResource boolConverter}}"  BorderBrush="#1E00AAFF" Margin="10,10,0,0" Foreground="#FF00AAFF" Value="{Binding CurrentProgress}"  HorizontalAlignment="Stretch" Maximum="{Binding PageNum}"  Height="5"  />
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel  Grid.Column="1" Orientation="Horizontal"  >
+                                    <Image  Cursor="Hand" Source="../Images/refresh.png" Width="32" Margin="2,0,0,0"  Height="24">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="MouseLeftButtonDown" >
+                                                <b:InvokeCommandAction Command="{Binding ReDownLoadCommand}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </Image>
+
+                                    <Image Cursor="Hand"   Source="../Images/read.png" Width="32" Margin="2,0,0,0"  Height="24">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="MouseLeftButtonDown" >
+                                                <b:InvokeCommandAction Command="{Binding OpenComicCommand}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </Image>
+                                    <Image Cursor="Hand"   Source="../Images/folder.png" Width="32" Margin="2,0,0,0"  Height="24">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="MouseLeftButtonDown" >
+                                                <b:InvokeCommandAction Command="{Binding OpenDirectoryCommand}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </Image>
+
+                                    <Image Cursor="Hand" Source="../Images/delete.png" Width="32" Margin="2,0,0,0"  Height="24">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="MouseLeftButtonDown" >
+                                                <b:InvokeCommandAction Command="{Binding DeleteTaskCommand}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </Image>
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+
+
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</local:PageBase>

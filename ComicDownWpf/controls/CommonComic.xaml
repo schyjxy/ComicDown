@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ComicDownWpf.controls.CommonComic"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ComicDownWpf.controls"
+             mc:Ignorable="d" 
+             xmlns:pu="clr-namespace:Panuon.UI.Silver;assembly=Panuon.UI.Silver"
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded"  SizeChanged="UserControl_SizeChanged">
+    <UserControl.Resources>
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Control.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Panuon.UI.Silver;component/Resources/Resource.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        
+        
+        <local:SmoothScrollViewer x:Name="smoothScroll" PreviewMouseWheel="SmoothScrollViewer_PreviewMouseWheel"    Grid.Row="1"  Style="{StaticResource for_scrollviewer}">
+            <!--<pu:WaterfallViewer  Groups="1"  Name="waterViwer" IsLazyLoadingEnabled="True" LazyLoading="waterViwer_LazyLoading"/>-->
+            <StackPanel Name="stackPanel" Orientation="Vertical" MouseLeftButtonDown="stackPanel_MouseLeftButtonDown" MouseMove="stackPanel_MouseMove" MouseWheel="stackPanel_MouseWheel"  MouseLeftButtonUp="stackPanel_MouseLeftButtonUp"/>
+        </local:SmoothScrollViewer>
+        
+    </Grid>
+</UserControl>

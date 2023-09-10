@@ -1,0 +1,21 @@
+1、书签同步webdav
+2、在线同步阅读
+5、UI 调整
+6、下载进度存入数据库
+7、支持分类、搜索页面
+
+
+漫画源：
+百年漫画
+https://www.bainianx.com/ 需要书币，慎重
+http://wap.ykmh.com/
+
+滴滴漫画
+https://m.nfydd.com/
+
+http://m.89mh.com
+古风漫画
+https://m.gufengmh8.com/update/
+
+热辣漫画
+https://www.manga2020.com/

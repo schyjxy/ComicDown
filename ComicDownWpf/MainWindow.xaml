@@ -1,0 +1,308 @@
+﻿<DMSkin:DMSkinSimpleWindow
+    x:Class="ComicDownWpf.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:DMSkin="clr-namespace:DMSkin.WPF;assembly=DMSkin.WPF"
+    xmlns:dmcontrols="clr-namespace:DMSkin.WPF.Controls;assembly=DMSkin.WPF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:myConverter ="clr-namespace:ComicDownWpf.converter"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
+    Title="漫画当"
+    Width="1180"
+    Height="700"
+    Background="#23283B"
+    BorderThickness="0"
+    DMWindowShadowColor="#FF999999"
+    DMWindowShadowSize="10"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    TextOptions.TextFormattingMode="Display"
+    xmlns:controls="clr-namespace:ComicDownWpf.controls"
+    xmlns:viewmodel="clr-namespace:ComicDownWpf.viewmodel"
+    
+    WindowStyle="None"
+    mc:Ignorable="d"
+    Loaded="DMSkinSimpleWindow_Loaded"
+    Closing="DMSkinSimpleWindow_Closing"
+    KeyDown="DMSkinSimpleWindow_KeyDown"
+    MouseDown="DMSkinSimpleWindow_MouseDown"
+    >
+  
+    
+    <Window.Resources>
+        <Style x:Key="textStyle" TargetType="TextBlock" >
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style x:Key="radioStyle" TargetType="RadioButton">
+            <Setter Property="IsChecked" Value="False"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="{TemplateBinding Background}" ToolTip="{Binding Description}"  Width="{TemplateBinding Width}">
+                                <TextBlock TextAlignment="Center" HorizontalAlignment="Center" FontSize="20" VerticalAlignment="Center"  Foreground="White" Text="{Binding Description}" />
+                            </Grid>
+                        </Border>
+                      
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Background" Value="#007ACC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <myConverter:EnumToBooleanConverter x:Key="cooleanConverter"/>
+        <Image x:Key="downLoadImg"  Width="32" Height="32" Cursor="Hand" Visibility="Visible" Source="Images\download.png" />
+        <Image x:Key="loveImg" Width="32" Height="32" Cursor="Hand" Source="Images\love.png" Margin="10,0,0,0" />
+        <Image x:Key="searchImg"  Width="32" Height="32" Cursor="Hand" Source="Images\search.png" Margin="10,0,0,0" />
+        <Image x:Key="setimg"  Width="32" Height="32" Source="Images/setup.png"/>
+
+        <Style TargetType="{x:Type controls:TextItem}">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Height" Value="50"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type controls:TextItem}">
+                        <Border x:Name="mainBorder" BorderThickness="5,0,0,0">
+                            <Grid x:Name="myGrid" SnapsToDevicePixels="True">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="myGrid"  Property="Background" Value="#007ACC"/>
+                            </Trigger>
+
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="mainBorder" Property="BorderBrush" Value="#007ACC" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewmodel:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid Background="#23283B"  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <Border  BorderBrush="Black" BorderThickness="1">
+            <Grid Background="#23283B">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="120"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="漫画当" FontFamily="微软雅黑" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="53,50,55,0" FontSize="30"  Width="90" Height="40" />
+
+                <ItemsControl x:Name="itemControl" ItemsSource="{Binding ParserList}" Grid.Row="1" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid >
+                                <controls:ImageRadioButton Decoder="{Binding Decoder}"  IsChecked="{Binding IsChecked}" Foreground="White" GroupName="test" FontSize="16" Command="{Binding ClickItemCmd}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}" Style="{StaticResource radioStyle}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+               
+
+                <StackPanel Grid.Row="2" Orientation="Horizontal" >
+                    <RadioButton  Width="32" Margin="10,0,0,0" Cursor="Hand"  IsChecked ="{Binding ClickMenu, Converter={StaticResource BoolToVisibilityConverter} ,Mode=TwoWay, ConverterParameter=DownLoad }" >
+                        <RadioButton.Style  >
+                            <Style TargetType="RadioButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <!--<Ellipse  Name="elipse" Fill="Red" Width="7" Height="7" HorizontalAlignment="Right" VerticalAlignment="Top"/>-->
+                                                <Image Source="Images/download.png"  Stretch="Uniform"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </RadioButton.Style>
+
+                    </RadioButton>
+
+                    <RadioButton Name="check" Margin="10,0,0,0"   Width="32" Cursor="Hand" IsChecked ="{Binding ClickMenu, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay, ConverterParameter=BookShelf}">
+                        <RadioButton.Style  >
+                            <Style TargetType="RadioButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Image Source="Images/love.png"  Stretch="Uniform"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </RadioButton.Style>
+                    </RadioButton>
+
+                    <RadioButton Width="32" Cursor="Hand" Margin="10,0,0,0" IsChecked ="{Binding ClickMenu, Converter={StaticResource BoolToVisibilityConverter} ,Mode=TwoWay, ConverterParameter=Search }">
+                        <RadioButton.Style  >
+                            <Style TargetType="RadioButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Image Source="Images/search.png"  Stretch="Uniform"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </RadioButton.Style>
+
+                    </RadioButton>
+
+                    <RadioButton Width="32" Margin="10,0,0,0" Cursor="Hand" IsChecked ="{Binding ClickMenu, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay, ConverterParameter=History }">
+                        <RadioButton.Style  >
+                            <Style TargetType="RadioButton">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Grid>
+                                                <Image Source="Images/history.png"  Stretch="Uniform"/>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                        </RadioButton.Style>
+                    </RadioButton>
+                </StackPanel>
+
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" Background="#23283B">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <controls:IconButton 
+                        Margin="10,10,0,0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Command="{x:Static NavigationCommands.BrowseBack}"
+                        CommandTarget="{Binding ElementName=mainFrame}"
+                        Style="{StaticResource PageButton}"
+                        >
+                        <Path
+                        Width="11"
+                        Height="11"
+                        Data="{StaticResource Icon_Page_Left}"
+                        Fill="White"
+                        Stretch="Uniform" />
+                    </controls:IconButton>
+
+                    <controls:IconButton
+                    Cursor="Hand"
+                    Command="{x:Static NavigationCommands.BrowseForward}"
+                    CommandTarget="{Binding ElementName=mainFrame}"
+                    CornerRadius="0,3,3,0"
+                    Margin="40,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Style="{StaticResource PageButton}">
+                        <Path
+                        Width="11"
+                        Height="11"
+                        Data="{StaticResource Icon_Page_Right}"
+                        Fill="White"
+                        Stretch="Uniform" />
+                    </controls:IconButton>
+
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <dmcontrols:DMSystemMinButton
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Cursor="Hand"
+                    Margin="0,0,60,0" 
+                    Width="32"
+                    Height="20"    
+                    DMSystemButtonForeground="White"
+                    DMSystemButtonHoverColor="Transparent"
+                    DMSystemButtonHoverForeground="White"
+                    DMSystemButtonSize="22"
+                    Icon="{StaticResource Icon_Min}" />
+
+                    <dmcontrols:DMSystemMaxButton
+                    Cursor="Hand"
+                    Margin="0,0,30,0" 
+                    Width="32"
+                    Height="20" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    DMSystemButtonHoverColor="Transparent"
+                    DMSystemButtonHoverForeground="White"
+                    DMSystemButtonSize="24"
+                    Icon="{StaticResource Icon_Close}" />
+
+                    <dmcontrols:DMSystemCloseButton
+                    Cursor="Hand"
+                    Margin="0,0,0,0" 
+                    Width="32"
+                    Height="20"
+                    Background="Transparent"    
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    DMSystemButtonHoverColor="Transparent"
+                    DMSystemButtonHoverForeground="White"
+                    Icon="{StaticResource Icon_Min}"
+                    DMSystemButtonSize="22" />
+
+                </Grid>
+
+
+            </Grid>
+            
+            
+            <Frame Name="mainFrame"  Content="{Binding CurrentPage}" Grid.Row="1"   NavigationUIVisibility="Hidden" >
+                <!--Content="{Binding CurrentPage}"-->
+            </Frame>
+
+        </Grid>
+
+
+    </Grid>
+</DMSkin:DMSkinSimpleWindow>
