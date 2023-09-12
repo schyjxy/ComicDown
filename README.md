@@ -1,4 +1,4 @@
-# <center>ComicDownWpf </center>
+# <center>ComicDown</center>
 ## 1、简介
 
 一个PC 端的漫画阅读下载工具，支持在线阅读，插件开发
@@ -34,13 +34,28 @@
 - **漫画DB**
 - **X漫画**
 - **90漫画**
-- **漫画猫**
+
+
+
+功能：
+
+漫画在线阅读
+
+漫画下载
+
+漫画搜索
+
+收藏
 
 
 
 ## 2、编译
 
-VS 2022 ，需要手动引用的库位于 third_party 下
+IDE: VS 2022 
+
+.Net framework  4.7.2
+
+手动引用位于 third_party 下的dll
 
 
 

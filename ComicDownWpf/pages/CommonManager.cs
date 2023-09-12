@@ -5,9 +5,16 @@ using ComicPlugin;
 using System.Windows.Controls;
 using System.IO;
 using System;
+using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace ComicDownWpf
 {
+    class CacheConfig
+    { 
+        public string RootPath { get; set; }
+    }
+
     class CommonManager
     {
         public static ComicCollect comicCollectPage = new ComicCollect();
@@ -17,9 +24,10 @@ namespace ComicDownWpf
         public static HistoryPage historyPage = new HistoryPage();
         public static SearchPage searchPage = new SearchPage();
         public static DownCharpterPage downCharpterPage = new DownCharpterPage();
-        public static string g_temp_path = @"E:\漫画\";
-        public static string g_cache_path = g_temp_path + @"cache\";
-        public static string g_download_path = g_temp_path + @"download\";
+        public static string g_temp_path;
+        public static string g_cache_path;
+        public static string g_download_path;
+        private static string config_path = "config.json";
 
         public static string CacheImage(string url, string subPath)
         {
@@ -45,9 +53,37 @@ namespace ComicDownWpf
             return fullPath;
         }
 
+        public static CacheConfig LoadConfig()
+        { 
+            string text =  File.ReadAllText(config_path);
+            CacheConfig config = JsonConvert.DeserializeObject<CacheConfig>(text);
+            return config;
+        }
+
+        public static void SaveConfig(CacheConfig config) 
+        {
+            string json = JsonConvert.SerializeObject(config);
+            File.WriteAllText(config_path, json);
+        }
 
         public static void Init()
         {
+            CacheConfig config = null;
+
+            if (File.Exists("config.json"))
+            {
+                config = LoadConfig();
+            }
+            else 
+            {
+                config = new CacheConfig();
+                config.RootPath = Directory.GetCurrentDirectory();
+                SaveConfig(config);
+            }
+
+            g_temp_path = config.RootPath;
+            g_cache_path = g_temp_path + @"cache\";
+            g_download_path = g_temp_path + @"download\";
             ParserManager.Init();
         }
 
